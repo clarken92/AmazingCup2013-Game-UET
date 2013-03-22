@@ -14,8 +14,6 @@ namespace CustomGame
 {
     public class OptionScene : GameScene
     {
-        private static bool isFullScreen = false;
-
         private Texture2D backgroundTexture;
         private Vector2 backgroundPosition;
 
@@ -24,12 +22,15 @@ namespace CustomGame
 
         private Texture2D tickTexture;
         private Vector2 tickPosition;
+        private Texture2D soundBarTexture;
+        private Vector2 soundBarPosition;
 
         private Button closeButton;
         private Button increButton;
         private Button decreButton;
 
-        public OptionScene() : base() 
+        public OptionScene()
+            : base()
         {
             IsPopup = true;
 
@@ -43,8 +44,6 @@ namespace CustomGame
 
             backgroundTexture = content.Load<Texture2D>(@"images\scene\OptionScene\dialog_options");
             loadingBlackTexture = content.Load<Texture2D>(@"images\scene\OptionScene\FadeScreen");
-            tickTexture = content.Load<Texture2D>(@"images\scene\OptionScene\tick_full_screen");
-            tickPosition = backgroundPosition + new Vector2(70, 70);
 
             Viewport viewport = SceneManager.GraphicsDevice.Viewport;
             backgroundPosition = new Vector2(
@@ -52,6 +51,9 @@ namespace CustomGame
                 (viewport.Height - backgroundTexture.Height) / 2);
             loadingBlackTextureDestination = new Rectangle(viewport.X, viewport.Y,
                 viewport.Width, viewport.Height);
+
+            tickTexture = content.Load<Texture2D>(@"images\scene\OptionScene\tick_full_screen");
+            tickPosition = backgroundPosition + new Vector2(70, 70);
 
             Texture2D texture = content.Load<Texture2D>(@"images\scene\OptionScene\b_close");
             Texture2D pressTexture = content.Load<Texture2D>(@"images\scene\OptionScene\b_close_clicked");
@@ -61,13 +63,18 @@ namespace CustomGame
 
             texture = content.Load<Texture2D>(@"images\scene\OptionScene\decrease_volume");
             pressTexture = content.Load<Texture2D>(@"images\scene\OptionScene\decrease_volume_clicked");
-            position = backgroundPosition + new Vector2(290, 190);
-            increButton = new Button(texture, null, pressTexture, position);
+            position = backgroundPosition + new Vector2(283, 183);
+            decreButton = new Button(texture, null, pressTexture, position);
+            decreButton.Clicked += DecreButtonClicked;
 
             texture = content.Load<Texture2D>(@"images\scene\OptionScene\increase_volume");
             pressTexture = content.Load<Texture2D>(@"images\scene\OptionScene\increase_volume_clicked");
-            position = backgroundPosition + new Vector2(620, 183);
-            decreButton = new Button(texture, null, pressTexture, position);
+            position = backgroundPosition + new Vector2(632, 170);
+            increButton = new Button(texture, null, pressTexture, position);
+            increButton.Clicked += IncreButtonClicked;
+
+            soundBarTexture = content.Load<Texture2D>(@"images\scene\OptionScene\sound_bar");
+            soundBarPosition = backgroundPosition + new Vector2(330, 190);
         }
 
         public override void Update(GameTime gameTime)
@@ -79,7 +86,7 @@ namespace CustomGame
             if (InputManager.IsMouseJustReleased() && InputManager.IsMouseHittedRectangle(new Rectangle(
                 (int)tickPosition.X, (int)tickPosition.Y, tickTexture.Width, tickTexture.Height)))
             {
-                isFullScreen = !isFullScreen;
+                UserData.isFullScreen = !UserData.isFullScreen;
                 SceneManager.ToggleFullScreen();
             }
         }
@@ -94,15 +101,35 @@ namespace CustomGame
             closeButton.Draw(spriteBatch);
             increButton.Draw(spriteBatch);
             decreButton.Draw(spriteBatch);
-            if (isFullScreen)
-                spriteBatch.Draw(tickTexture,tickPosition, Color.White);
+
+            for (int i = 0; i < UserData.sound; i++)
+            {
+                spriteBatch.Draw(soundBarTexture, soundBarPosition + i * (new Vector2(60, 0)), Color.White);
+            }
+
+            if (UserData.isFullScreen)
+                spriteBatch.Draw(tickTexture, tickPosition, Color.White);
 
             spriteBatch.End();
+        }
+
+        private void DecreButtonClicked(object sender, EventArgs e)
+        {
+            if (UserData.sound > 0)
+                UserData.sound--;
+        }
+
+        private void IncreButtonClicked(object sender, EventArgs e)
+        {
+            if (UserData.sound < 5)
+                UserData.sound++;
         }
 
         private void CloseButtonClicked(object sender, EventArgs e)
         {
             this.ExitScreen();
         }
+
+
     }
 }

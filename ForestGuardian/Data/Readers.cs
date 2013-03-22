@@ -35,20 +35,4 @@ namespace Data
         }
     }
 
-    public class EntityReader
-    {
-        public E Read<E>(string filename, ContentManager Content)
-        {
-            E entity = default(E);
-            try
-            {
-                StreamReader sr = new StreamReader(TitleContainer.OpenStream(Content.RootDirectory + "/" + filename));
-                XmlSerializer serializer = new XmlSerializer(typeof(E));
-                entity = (E)serializer.Deserialize(sr);
-                sr.Close();
-            }
-            catch (Exception) { }
-            return entity;
-        }
-    }
 }

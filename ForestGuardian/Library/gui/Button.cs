@@ -15,7 +15,7 @@ namespace Library
         Pressing,
     }
 
-    public class Button
+    public class  Button
     {
         protected MouseState previousState;
 
@@ -44,9 +44,9 @@ namespace Library
             this.pressTexture = pressTexture;
             this.normalTexture = normalTexture;
             this.texture = normalTexture;
-            this.position = position;
 
-            this.bounds = new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width), (int)(texture.Height));
+            this.position = position;
+            this.bounds = new Rectangle((int)position.X, (int)position.Y, (int)(normalTexture.Width), (int)(normalTexture.Height));
         }
 
         public Vector2 Position
@@ -120,18 +120,19 @@ namespace Library
             }
             //Cap nhat mouse state
             previousState = mouseState;
+
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (state == ButtonStatus.Pressing && pressTexture != null){
-                texture = pressTexture;
-            }
-            else if (state == ButtonStatus.Hovering && hoverTexture != null){
-                texture = hoverTexture;
-            }
-            else{
-                texture = normalTexture;
+            switch (state)
+            {
+                case ButtonStatus.Pressing:
+                    if (pressTexture != null) { texture = pressTexture; } 
+                    break;
+                case ButtonStatus.Hovering:
+                    if (hoverTexture != null) { texture = hoverTexture; }
+                    break;
             }
             spriteBatch.Draw(texture, this.position, null, Color.White, Rotation, Vector2.Zero, Scale, SpriteEffects.None, layer_depth);
         }
