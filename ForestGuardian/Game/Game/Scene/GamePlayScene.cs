@@ -21,12 +21,12 @@ namespace CustomGame
     
     public class GamePlayScene : GameScene
     {
-        private static float LAYER_DEPTH_CHANGE = 0.005f; 
+        private float LAYER_DEPTH_CHANGE = 0.005f; 
         private BackgroundLayer background_layer;
 
+        //Phan map va kich thuoc map
         private int width, height;
-        private int tile_size;
-        
+        private int tile_size;      
         private byte[] tower_map;
         
         //Phan game play
@@ -34,12 +34,9 @@ namespace CustomGame
         private int money=1000;
         private int points = 888888;
 
-        //private HudLayer hud_layer;
-        //private TowerHandleLayer tower_handle_layer;
         private bool is_tower_add = false;
         private TowerType tower_type;
-        private Label CursorLabel;
-        //private Texture2D tower_texture;     
+        private Label CursorLabel;   
 
         private bool is_tower_select = false;
         private int tower_keypos = -1;
@@ -336,17 +333,6 @@ namespace CustomGame
 
                             tower_layer_depth = tower.LayerDepth;
                             tower.LayerDepth = RangeLabel.LayerDepth - 0.01f;
-
-                            //UpgradeLabel.Max = false;
-                            //if (tower.Level > 2)
-                            //{
-                            //    UpgradeLabel.Deactive();
-                            //    UpgradeLabel.Max = true;
-                            //}
-                            //else
-                            //{
-                            //    UpgradeLabel.Update(money);
-                            //}
 
                             is_tower_select = true;
                         }
