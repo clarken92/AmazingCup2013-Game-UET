@@ -34,11 +34,11 @@ namespace CustomGame
         private bool show = false;
         private bool open = false;
 
-        public NextWavesTable(List<Data.Wave> Waves)
-        {
-            this.Waves = Waves;
-        }
-        
+        public NextWavesTable()
+        {}
+
+        public void SetWaves(List<Data.Wave> waves){ Waves = waves; }
+
         public void LoadContent(ContentManager Content){
             Texture2D texture, hoverTexture;
             texture = Content.Load<Texture2D>(@"images\gameplay\buttons\next_waves_label");
@@ -81,6 +81,9 @@ namespace CustomGame
                                 break;
                             case EnemyType.SAW_MAN:
                                 next_wave_texture[i] = SawMan.TEXTURE;
+                                break;
+                            case EnemyType.DOZER:
+                                next_wave_texture[i] = Dozer.TEXTURE;
                                 break;
                         }
                     }

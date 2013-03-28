@@ -44,7 +44,6 @@ namespace CustomGame
         public override void Initialize()
         {
             base.Initialize();
-
             isInitialized = true;
         }
 
@@ -97,8 +96,7 @@ namespace CustomGame
                 // Update the scene.
                 scene.StateUpdate(gameTime, otherSceneHasFocus, coveredByOtherScene);
 
-                if (scene.SceneState == SceneState.TransitionOn ||
-                    scene.SceneState == SceneState.Active)
+                if (scene.SceneState == SceneState.TransitionOn || scene.SceneState == SceneState.Active)
                 {
                     // If this is the first active scene we came across,
                     // give it a chance to handle input.
@@ -111,14 +109,12 @@ namespace CustomGame
 
                     // If this is an active non-popup, inform any subsequent
                     // screens that they are covered by it.
-                    if (!scene.IsPopup)
-                        coveredByOtherScene = true;
+                    if (!scene.IsPopup) coveredByOtherScene = true;
                 }
             }
 
             // Print debug trace?
-            if (traceEnabled)
-                TraceScenes();
+            if (traceEnabled) TraceScenes();
         }
 
         void TraceScenes()
@@ -139,8 +135,7 @@ namespace CustomGame
             {
                 if (scene.SceneState == SceneState.Hidden)
                     continue;
-
-                scene.Draw(spriteBatch);
+                scene.Draw(spriteBatch, gameTime);
             }
             spriteBatch.Begin();
             spriteBatch.Draw(CursorTexture, CursorPosition, Color.White);
@@ -168,7 +163,6 @@ namespace CustomGame
             {
                 scene.UnloadContent();
             }
-
             scenes.Remove(scene);
             scenesToUpdate.Remove(scene);
         }
@@ -178,8 +172,16 @@ namespace CustomGame
             return scenes.ToArray();
         }
 
-        public void ToggleFullScreen(){
+        public void ToggleFullScreen()
+        {
             graphics.ToggleFullScreen();
+        }
+
+        //back to main menu
+        public void ExitToMainMenu()
+        {
+            scenes.Clear();
+            this.AddScene(new MainMenuScene());
         }
     }
 }

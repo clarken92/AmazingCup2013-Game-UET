@@ -17,14 +17,13 @@ namespace Library
         private bool finish=false;
         //Dang cho doi giua cac wave
         private bool waiting = true;
-        private float maxWaveDelay = 10.8f;
+        private float maxWaveDelay = 3.8f;
         private float timer;
 
         public Wave CurrentWave
         {
             get { return waves.Peek(); }
         }
-
         public int CurrentWaveNumber
         {
             get { return current_wave_number; }
@@ -33,17 +32,14 @@ namespace Library
         {
             get { return total_wave_number; }
         }
-
         public bool Finish
         {
             get { return finish; }
         }
-
         public bool Waiting
         {
             get { return waiting; }
         }
-
         public float Timer
         {
             get { return timer; }
@@ -56,8 +52,7 @@ namespace Library
             this.current_wave_number = 1;
             this.timer = maxWaveDelay;
         }
-
-        
+      
         public void Update(GameTime gameTime)
         {           
             //Neu van con wave

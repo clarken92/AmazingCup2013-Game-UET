@@ -10,6 +10,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
+using ProjectMercury;
+using ProjectMercury.Emitters;
+using ProjectMercury.Modifiers;
+using ProjectMercury.Renderers;
+
 using Library;
 using Data;
 
@@ -19,12 +24,19 @@ namespace CustomGame
     {
         GraphicsDeviceManager graphics;
         SceneManager sceneManager;
+        public static Renderer renderer;
+        public static KeyboardDispatcher keyboard_dispatcher;
 
         public GameManager()
         {
             graphics = new GraphicsDeviceManager(this);
             GameSetting.InitSetting(graphics);
             Content.RootDirectory = "Content";
+
+            renderer = new SpriteBatchRenderer
+            {
+                GraphicsDeviceService = graphics
+            };
 
             sceneManager = new SceneManager(this);
             Components.Add(sceneManager);
@@ -39,6 +51,8 @@ namespace CustomGame
         protected override void Initialize()
         {
             //IsMouseVisible = true;
+            keyboard_dispatcher = new KeyboardDispatcher(this.Window);
+            DataSerializer.Initialize();
             //UserData.Init();
 
             base.Initialize();
@@ -51,7 +65,9 @@ namespace CustomGame
         /// </summary>
         protected override void LoadContent()
         {
-
+            renderer.LoadContent(Content);
+            //DataSerializer.CheckDirectory(UserData.HighScoreDirectory);
+            UserData.LoadSetting();
             base.LoadContent();
         }
 

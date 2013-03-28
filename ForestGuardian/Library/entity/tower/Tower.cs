@@ -9,7 +9,6 @@ namespace Library
 {
     public enum TowerType
     {
-        NONE,
         OakTower,
         CactusTower,
         PineappleTower
@@ -121,26 +120,29 @@ namespace Library
 
         public virtual void createBullet() { }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime , bool isPause)
         {
             base.Update(gameTime);
 
-            if (reloadDuration >= 0)
+            if (!isPause) //NTA added
             {
-                reloadDuration -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-
-            if (target != null && !isInRange(target.Center))
-            {
-                target = null;
-            }
-
-            if (bullet != null)
-            {
-                bullet.Update(gameTime);
-                if (!bullet.Alive && target != null)
+                if (reloadDuration >= 0)
                 {
-                    bullet.HitTarget(target);
+                    reloadDuration -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+
+                if (target != null && !isInRange(target.Center))
+                {
+                    target = null;
+                }
+
+                if (bullet != null)
+                {
+                    bullet.Update(gameTime);
+                    if (!bullet.Alive && target != null)
+                    {
+                        bullet.HitTarget(target);
+                    }
                 }
             }
         }

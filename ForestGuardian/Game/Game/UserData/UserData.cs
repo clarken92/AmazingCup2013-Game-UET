@@ -4,59 +4,59 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
+using Data;
 namespace CustomGame
 {
     public static class UserData
-    {
-        public static string[] usernames;
-        public static int[] topScores;
-        public static Color[] colors;
-        public static bool isFullScreen;
-        public static int sound;
+    {     
+        public static bool isFullScreen = false;
 
-        public static void Init()
+        public static Setting setting;
+        public static string CustomSettingDirectory = "CustomSetting";
+        public static string CustomSettingFile = "customsetting.sav";
+        public static string DefaultSettingFilePath = "Content/data/default_setting/setting.xml";
+
+        public static string HighScoreDirectory = "HighScore";
+        public static string HighScoreFile = "highscore.sav";
+        public static HighScore highscore;
+        public static Color[] colors = {Color.Red,Color.Orange,Color.YellowGreen,
+                                           Color.Lime, Color.Lime, Color.Lime, Color.Lime, Color.Lime};
+        
+        //Do kho
+        public static int level;
+        
+        public static string mapFile = @"data\maps\map1";
+
+        public static string[][] levelScene;
+
+        public static void LoadSetting()
         {
-            isFullScreen = false;
-            sound = 3;
-            usernames = new string[8];
-            topScores = new int[8];
-
-            colors = new Color[8];
-            colors[0] = Color.Red;
-            colors[1] = Color.Orange;
-            colors[2] = Color.YellowGreen;
-            for (int i = 3; i < 8; i++)
-                colors[i] = Color.Lime;
-
-            for (int i = 0; i < 8; i++)
+            //Phan score
+            if (DataSerializer.FileExists(HighScoreDirectory, HighScoreFile))
             {
-                usernames[i] = "";
-                topScores[i] = 0;
+                highscore = DataSerializer.LoadData<HighScore>(HighScoreDirectory, HighScoreFile);
+            }
+            else { 
+                highscore = new HighScore();
+                DataSerializer.SaveData<HighScore>(highscore, HighScoreDirectory, HighScoreFile);
+            }
+
+            //Phan custom setting
+            if (DataSerializer.FileExists(CustomSettingDirectory, CustomSettingFile))
+            {
+                setting = DataSerializer.LoadData<Setting>(CustomSettingDirectory, CustomSettingFile);
+            }
+            //Neu chua co thi load default setting
+            else
+            {
+                setting = DataSerializer.LoadStaticData<Setting>(DefaultSettingFilePath);
+                Console.WriteLine(setting.music_volume);
             }
         }
 
-        public static void AddHighScore(int score, string name)
+        public static bool isTowerLock(int towerIndex)
         {
-            for (int i = 0; i < 8; i++)
-            {
-                if (score < topScores[i])
-                    continue;
-
-                int score1, score2;
-                string name1, name2;
-                score1 = score;
-                name1 = name;
-                for (int j = i; j < 8; j++)
-                {
-                    score2 = topScores[j];
-                    name2 = usernames[j];
-                    topScores[j] = score1;
-                    usernames[j] = name1;
-                    score1 = score2;
-                    name1 = name2;
-                }
-                return;
-            }
+            return towerIndex >= setting.towerLockIndex;
         }
     }
 }
