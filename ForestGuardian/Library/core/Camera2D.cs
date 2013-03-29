@@ -11,10 +11,7 @@ namespace Library
     public class Camera2D
     {
         private static Matrix transform;
-        public static Matrix Transform
-        {
-            get { return transform; }
-        }
+        
         private static Vector2 position;
 
         private static Vector2 minPosition;
@@ -30,6 +27,16 @@ namespace Library
         
         //Kiem tra xem co su thay doi voi camera ko
         private static bool is_changed = true;
+
+        public static Matrix Transform
+        {
+            get { return transform; }
+        }
+
+        public static Vector2 Position
+        {
+            get { return position; }
+        }
 
         public static float X
         {
@@ -82,22 +89,22 @@ namespace Library
             else if (keyState.IsKeyDown(Keys.E)) { Zoom += 0.01f; }
             
             //Kiem tra xem co bi di chuyen khong
-            if (keyState.IsKeyDown(Keys.A)){ X -= 3.0f; }
-            else if (keyState.IsKeyDown(Keys.D)){ X += 3.0f; } 
+            if (keyState.IsKeyDown(Keys.A)){ X -= 5.0f; }
+            else if (keyState.IsKeyDown(Keys.D)){ X += 5.0f; } 
 
-            if (keyState.IsKeyDown(Keys.W)){ Y -= 3.0f; }
-            else if (keyState.IsKeyDown(Keys.S)){ Y += 3.0f; }
+            if (keyState.IsKeyDown(Keys.W)){ Y -= 5.0f; }
+            else if (keyState.IsKeyDown(Keys.S)){ Y += 5.0f; }
 
             if (is_changed)
             {
                 zoom = Math.Max(Math.Min(zoom, maxZoom), minZoom);
  
-                maxPosition.X = Math.Max(0, world_width - viewport_width / zoom);
-                maxPosition.Y = Math.Max(0, world_height - viewport_height / zoom);
+                maxPosition.X = Math.Max(0, world_width * zoom- viewport_width);
+                maxPosition.Y = Math.Max(0, world_height * zoom - viewport_height);
                 position = Vector2.Clamp(position, minPosition, maxPosition);
 
-                transform = Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0)) *
-                        Matrix.CreateScale(new Vector3(zoom, zoom, 1.0f));
+                transform = Matrix.CreateScale(new Vector3(zoom, zoom, 1.0f))
+                *Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0));
                 is_changed = false;
             }
         }

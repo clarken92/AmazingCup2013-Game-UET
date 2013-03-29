@@ -9,10 +9,11 @@ namespace Library
 {
     public enum TowerType
     {
-        OakTower,
-        CactusTower,
-        PineappleTower
+        Oak,
+        Cactus,
+        Pineapple
     }
+
     public class Tower : Sprite
     {
         //Cac thuoc tinh co ban cua moi tower
@@ -23,6 +24,7 @@ namespace Library
         protected float reloadDuration;
 
         protected int cost;
+        protected int upgradeCost;
         protected int level;
 
         protected Enemy target;
@@ -43,28 +45,27 @@ namespace Library
             get { return level; }
         }
 
-        #region Cost
         public int Cost
         {
             get { return cost; }
         }
         public int UpgradeCost
         {
-            get { return cost; }
+            get { return upgradeCost; }
         }
         public int SellCost
         {
-            get { return cost; }
+            get { return (cost/2); }
         }
-        #endregion
 
-        public Tower(Texture2D texture, Vector2 pCenter, int cost, int range, int damage, float fire_reload)
-            : this(texture, pCenter, Anchor.CENTER, cost, range, damage, fire_reload) { }
+        public Tower(Texture2D texture, Vector2 pCenter, int cost, int upgradeCost, int range, int damage, float fire_reload)
+            : this(texture, pCenter, Anchor.CENTER, cost, upgradeCost, range, damage, fire_reload) { }
 
-        public Tower(Texture2D texture, Vector2 pPosition, Anchor a, int cost, int range, int damage, float fire_reload)
+        public Tower(Texture2D texture, Vector2 pPosition, Anchor a, int cost, int upgradeCost, int range, int damage, float fire_reload)
             : base(texture, pPosition, a)
         {
             this.cost = cost;
+            this.upgradeCost = upgradeCost;
             this.mRange = range;
             this.mDamage = damage;
             this.mFireReload = fire_reload;
@@ -111,19 +112,16 @@ namespace Library
             if (reloadDuration <= 0)
             {
                 reloadDuration = mFireReload;
-
                 target = enemy;
-
                 createBullet();
             }
         }
 
         public virtual void createBullet() { }
 
-        public void Update(GameTime gameTime , bool isPause)
+        public virtual void Update(GameTime gameTime , bool isPause)
         {
             base.Update(gameTime);
-
             if (!isPause) //NTA added
             {
                 if (reloadDuration >= 0)
