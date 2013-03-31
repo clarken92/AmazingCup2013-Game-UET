@@ -29,9 +29,14 @@ namespace Data
         public int Height;
         public int TileSize;
         public string BackgroundFile;
-        
+        private Texture2D mBackgroundTexture;
+
         [ContentSerializerIgnore]
-        public Texture2D BackgroundTexture;
+        public Texture2D BackgroundTexture
+        {
+            get { return mBackgroundTexture; }
+            set { mBackgroundTexture = value; }
+        }
 
         public byte[] InteractiveMap;
         public Cell StartCell;
@@ -64,7 +69,7 @@ namespace Data
             for (int i = 0; i < Waves.Count;i++ )
             {
                 Waves[i].path_order = random.Next(Waves.Count);
-                Waves[i].GrowRate = i / Data.Wave.NUMBER_BETWEEN_GROW * Data.Wave.BASE_GROW_RATE;
+                Waves[i].GrowRate = (i / Data.Wave.NUMBER_BETWEEN_GROW) * Data.Wave.BASE_GROW_RATE;
             }
         }
 
@@ -150,7 +155,6 @@ namespace Data
             Debug.WriteLine(BackgroundFile);
             Debug.WriteLine(InteractiveMap);
             Debug.WriteLine(paths.Count);
-            //Debug.WriteLine("Path number: " + Paths.Count);
         }
     }
 }

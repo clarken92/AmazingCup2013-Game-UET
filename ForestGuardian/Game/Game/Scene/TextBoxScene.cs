@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.Media;
 
 using Library;
 using Data;
@@ -61,19 +62,25 @@ namespace CustomGame
         private void TextBoxEnter_Pressed(TextBox sender)
         {
             string player_name = textBox.Text;
-            UserData.highscore.AddScore(new Score(player_name, total_points));
-            DataSerializer.SaveData<HighScore>(UserData.highscore, UserData.HighScoreDirectory ,UserData.HighScoreFile);
-            sceneManager.ExitToMainMenu();
-            sceneManager.AddScene(new ScoreScene());
+            if (player_name != null && !player_name.Equals(""))
+            {
+                UserData.highscore.AddScore(new Score(player_name, total_points));
+                DataSerializer.SaveData<HighScore>(UserData.highscore, UserData.HighScoreDirectory, UserData.HighScoreFile);
+                sceneManager.ExitToMainMenu();
+                sceneManager.AddScene(new ScoreScene());
+            }
         }
         
         private void SaveButton_Clicked(object sender, EventArgs e)
         {
             string player_name = textBox.Text;
-            UserData.highscore.AddScore(new Score(player_name,total_points));
-            DataSerializer.SaveData<HighScore>(UserData.highscore, UserData.HighScoreDirectory ,UserData.HighScoreFile);
-            sceneManager.ExitToMainMenu();
-            sceneManager.AddScene(new ScoreScene());
+            if (player_name != null && !player_name.Equals(""))
+            {
+                UserData.highscore.AddScore(new Score(player_name, total_points));
+                DataSerializer.SaveData<HighScore>(UserData.highscore, UserData.HighScoreDirectory, UserData.HighScoreFile);
+                sceneManager.ExitToMainMenu();
+                sceneManager.AddScene(new ScoreScene());
+            }       
         }
 
         private void CancelButton_Clicked(object sender, EventArgs e)

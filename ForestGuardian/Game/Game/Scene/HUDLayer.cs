@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Media;
 using Library; 
 
 namespace CustomGame
@@ -16,7 +17,7 @@ namespace CustomGame
         private Label LifeLabel;
         private Label MoneyLabel;
 
-        private Vector2 PointPosition;
+        private Vector2 PointPosition = new Vector2(512,48);
 
         private ToggleButton playButton;
         private ToggleButton fastButton;
@@ -61,7 +62,7 @@ namespace CustomGame
 
         private void PlayButton_Clicked(object sender, EventArgs e)
         {
-            gameplay.Pause = !gameplay.Pause;
+            gameplay.Pause = !gameplay.Pause;           
             playButton.Active = !playButton.Active;
         }
 

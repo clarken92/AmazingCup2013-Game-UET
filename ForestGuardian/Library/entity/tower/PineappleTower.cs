@@ -16,10 +16,11 @@ namespace Library
 
         public static Texture2D BULLET_TEXTURE;
 
-        public static float FIRE_RELOAD = 0.5f;
+        public static float FIRE_RELOAD = 1.5f;
         public static int COST = 25;
         public static int UP_COST = 20;
-        public static int RANGE = 250;
+
+        public static int RANGE = 200;
         public static int DAMAGE = 25;
 
         private List<Enemy> mEnemies;
@@ -29,6 +30,15 @@ namespace Library
 
         public PineappleTower(Vector2 pPosition, Anchor a)
             : base(TEXTURE_LV1, pPosition, a, COST, UP_COST, RANGE, DAMAGE, FIRE_RELOAD) { }
+
+        public static string TowerInfo()
+        {
+            string towerInfo = "Name: " + NAME + "\n" +
+                               "Damage: " + DAMAGE + "/" + (int)(DAMAGE * 1.3f) + "/" + (int)(DAMAGE * 1.5f) + "\n" +
+                               "Range: " + RANGE + "\n" + "Cost: " + COST + "\n" +
+                               "Splash Range: " + PineappleBullet.SPLASH_RANGE;
+            return towerInfo;
+        }
 
         public override void createBullet()
         {
@@ -45,12 +55,12 @@ namespace Library
             if (level == 2)
             {
                 mTexture = TEXTURE_LV2;
-                mDamage = (int)(DAMAGE * 1.5f);
+                mDamage = (int)(DAMAGE * 1.3f);
             }
             else if (level == 3)
             {
                 mTexture = TEXTURE_LV3;
-                mDamage = (int)(DAMAGE * 1.8f);
+                mDamage = (int)(DAMAGE * 1.5f);
             }
         }
 

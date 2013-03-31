@@ -55,7 +55,6 @@ namespace CustomGame
             //IsMouseVisible = true;
             keyboard_dispatcher = new KeyboardDispatcher(this.Window);
             DataSerializer.Initialize();
-            //UserData.Init();
 
             base.Initialize();
             sceneManager.AddScene(new MainMenuScene());
@@ -70,7 +69,7 @@ namespace CustomGame
             renderer.LoadContent(Content);
 
             UserData.LoadSetting();
-            AudioManager.SetMusicVolume(UserData.setting.music_volume);
+            MediaPlayer.Volume = (float)UserData.setting.music_volume * 0.01f;
             AudioManager.SetSoundVolume(UserData.setting.sound_volume);
 
             base.LoadContent();
@@ -92,6 +91,16 @@ namespace CustomGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (!IsActive)
+            {
+                MediaPlayer.Pause();
+                AudioManager.PauseMovingSound();
+            }
+            if (IsActive && (MediaPlayer.State == MediaState.Paused))
+            {
+                MediaPlayer.Resume();
+            }
+
             InputManager.Update();
             AudioManager.Update();
             base.Update(gameTime);

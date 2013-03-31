@@ -77,11 +77,11 @@ namespace CustomGame
 
         private CustomRenderer mRenderer = GameManager.renderer;
 
+        private bool isFirst;
         //Singleton
         private static GamePlayScene GamePlay;
 
-        private GamePlayScene() {
-        }
+        private GamePlayScene() { isFirst = true; }
         public static GamePlayScene Instance
         {
             get{
@@ -90,6 +90,11 @@ namespace CustomGame
             }
         }
 
+        public void ClearEffect()
+        {
+            tower_manager.ClearEffect();
+        }
+        
         public int Lives { get { return lives; } }
         public int Money { get { return money; } }
         public int Points { get { return points; } }
@@ -183,7 +188,7 @@ namespace CustomGame
         {
             switch (UserData.currentMapMode)
             {
-                case (int)Mode.Classic:
+                case (int)Mode.Standard:
                     lives = MAX_LIVES; break;
                 case (int)Mode.Death:
                     lives = 1; break;
@@ -255,6 +260,7 @@ namespace CustomGame
                 song = Content.Load<Song>(map.SongFiles[i]);
                 songs.Add(song);
             }
+            MediaPlayer.Stop();
         }
 
         public int TileSize { get { return tile_size; } }
@@ -351,11 +357,20 @@ namespace CustomGame
 
         public override void  Update(GameTime gameTime)
         {
-            if (MediaPlayer.State == MediaState.Stopped)
+            if (isFirst)
             {
-                MediaPlayer.Play(songs[currentSongIndex]);
-                currentSongIndex = (currentSongIndex + 1) % songs.Count;
+                isFirst = false;
+                sceneManager.AddScene(new GameTipScene());
             }
+            else
+            {
+                if (MediaPlayer.State == MediaState.Stopped && songs.Count > 0)
+                {
+                    MediaPlayer.Play(songs[currentSongIndex]);
+                    currentSongIndex = (currentSongIndex + 1) % songs.Count;
+                }
+            }
+
             HudLayer.Update(gameTime);
 
             if (UserData.currentMapMode == (int)Mode.Time)
@@ -615,12 +630,14 @@ namespace CustomGame
                 WaveTable.Draw(spriteBatch);
                 HudLayer.Draw(spriteBatch);
             spriteBatch.End();
+            
 
             Matrix resolution = Camera2D.Transform;
 
             mRenderer.RenderEffect(OakBullet.EFFECT, ref resolution);
             mRenderer.RenderEffect(CactusBullet.EFFECT, ref resolution);
             mRenderer.RenderEffect(PineappleBullet.EFFECT, ref resolution);
+
         }
     }
 }
